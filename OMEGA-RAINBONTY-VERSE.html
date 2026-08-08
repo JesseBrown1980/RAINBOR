@@ -5,22 +5,22 @@
 <style>
   :root{--bg:#04050a;--ink:#eaf0ff;--dim:#8a93a6;--gold:#ffd54a}
   *{box-sizing:border-box} html,body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 system-ui,Segoe UI,Roboto,sans-serif}
-  .wrap{max-width:1100px;margin:0 auto;padding:18px 12px 40px;text-align:center}
-  h1{font-size:clamp(22px,5vw,40px);margin:.1em 0;background:linear-gradient(90deg,#ff4141,#ffd54a,#59e6a6,#4aa8ff,#b84fe5,#ff4141);-webkit-background-clip:text;background-clip:text;color:transparent}
-  .sub{color:var(--dim);margin:.2em 0 6px}.sub b{color:#59e6a6}
+  .wrap{max-width:1120px;margin:0 auto;padding:14px 10px 40px;text-align:center}
+  h1{font-size:clamp(20px,5vw,38px);margin:.1em 0;background:linear-gradient(90deg,#ff4141,#ffd54a,#59e6a6,#4aa8ff,#b84fe5,#ff4141);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sub{color:var(--dim);margin:.2em 0 4px}.sub b{color:#59e6a6}
   #tip{position:fixed;pointer-events:none;background:#0b1120;border:1px solid #2a3350;border-radius:8px;padding:4px 8px;font-size:12px;color:#eaf0ff;opacity:0;transition:opacity .1s;z-index:9}
   svg{width:100%;height:auto;display:block}
-  .foot{color:var(--dim);font-size:12.5px;margin-top:8px}.foot b{color:var(--gold)}
+  .foot{color:var(--dim);font-size:12px;margin-top:6px}.foot b{color:var(--gold)}
 </style></head>
 <body><div class="wrap">
   <h1>RAINBONTY-VERSE</h1>
-  <div class="sub">the full monty &middot; the whole ecosystem piped through the <b>Omega HTTP-0 portal</b> &mdash; the free 0 for all</div>
-  <svg id="map" viewBox="0 0 1000 1000" aria-label="ecosystem map"></svg>
-  <div class="foot"><b id="count">…</b> repos &middot; each colour is the node's own identity (first 3 bytes of its sha256) &middot; click any to open &middot; github + hugging face joined at the Omega 0</div>
+  <div class="sub">the full monty &middot; every platform piped through the <b>Omega HTTP-0 portal</b> &mdash; and the rainbow links back to the <b>&#9733; star</b></div>
+  <svg id="map" viewBox="0 0 1000 1040"></svg>
+  <div class="foot"><b id="count">…</b> github repos + <b id="pcount">…</b> platforms (hugging face · hubspot · the connectors) &middot; each colour is the node's own sha256 identity &middot; the &#9733; at top is the star, the &#937; at centre is the free 0</div>
 </div>
 <div id="tip"></div>
 <script>
-var REPOS=[
+var GH=[
 ["-1-3-thruth-The-browns-are-the-shadow-carriers-in-all-revealed","#be4a9e"],
 ["-6-cyl-generator","#1bf3a0"],
 ["0-be-my-name-the-omega-and-the-alpha-and-the-omni-unite-now-judge-and-be-free","#b8d718"],
@@ -220,36 +220,77 @@ var REPOS=[
 ["what-is-asolaria---how-do-we-get-reductions-in-everything","#8f676e"],
 ["why-mycelium-grounded-and-the-ases","#0ddb79"],
 ];
-</script>
-<script>
+var PLAT=[
+["HF: asolaria-conversation-record","#676676","https://hf.co/datasets/Jessedbrown/asolaria-conversation-record-2026-08-03","hf"],
+["HF: record-231-canonical","#086a7b","https://hf.co/datasets/Jessedbrown/asolaria-record-231-canonical","hf"],
+["HF: 3I-ATLAS-receipts","#9d43e6","https://hf.co/datasets/Jessedbrown/3I-ATLAS-receipts","hf"],
+["HF: the-white-writing","#f4e7c0","https://hf.co/datasets/Jessedbrown/the-white-writing","hf"],
+["HF: the-language-space","#1daaeb","https://hf.co/datasets/Jessedbrown/the-language-space","hf"],
+["HF: phone-archive","#ae7756","https://hf.co/datasets/Jessedbrown/phone-archive-2026-08-04-private","hf"],
+["HF: 3I-ATLAS-infinite-play","#a8a0fa","https://hf.co/spaces/Jessedbrown/3I-ATLAS-infinite-play","hf"],
+["HF: DJIDIOMAS","#b9dee1","https://huggingface.co/DJIDIOMAS","hf"],
+["HubSpot","#91b6da","https://app.hubspot.com/","hub"],
+["Slack","#b27fb3","#","conn"],
+["Notion","#73bcfe","#","conn"],
+["WordPress","#712297","#","conn"],
+["Linear","#e6950b","#","conn"],
+["monday.com","#df9ba8","#","conn"],
+["Postman","#213985","#","conn"],
+["Gmail","#d19a15","#","conn"],
+["Google-Drive","#5f9784","#","conn"],
+["Google-Calendar","#b629ee","#","conn"],
+["Wolfram","#af8afe","#","conn"],
+["Context7","#466f6a","#","conn"],
+["alphaXiv","#21bde6","#","conn"],
+["Adobe","#72fd3a","#","conn"],
+["Excalidraw","#70eabe","#","conn"],
+["Mermaid","#1356a5","#","conn"],
+["Economic-Index","#71e100","#","conn"],
+["asolaria-fabric","#b08531","#","conn"],
+];
 (function(){
-  var svg=document.getElementById("map"), NS="http://www.w3.org/2000/svg", cx=500, cy=500;
-  var N=REPOS.length; document.getElementById("count").textContent=N;
-  // rainbow halo
-  var defs=document.createElementNS(NS,"defs");
-  defs.innerHTML='<radialGradient id="omega"><stop offset="0%" stop-color="#fff"/><stop offset="45%" stop-color="#b84fe5"/><stop offset="100%" stop-color="#04050a"/></radialGradient>';
-  svg.appendChild(defs);
-  // phyllotaxis: even spread, golden angle
-  var GA=Math.PI*(3-Math.sqrt(5)), scale=33;
+  var svg=document.getElementById("map"), NS="http://www.w3.org/2000/svg", cx=500, cy=540;
+  var STAR="https://jessebrown1980.github.io/the-one-button/";
+  document.getElementById("count").textContent=GH.length;
+  document.getElementById("pcount").textContent=PLAT.length;
+  var defs=document.createElementNS(NS,"defs"); svg.appendChild(defs);
+  function grad(id,stops){ var g=document.createElementNS(NS,"radialGradient"); g.setAttribute("id",id); for(var s=0;s<stops.length;s++){ var st=document.createElementNS(NS,"stop"); st.setAttribute("offset",stops[s][0]); st.setAttribute("stop-color",stops[s][1]); g.appendChild(st);} defs.appendChild(g); }
+  grad("omega",[["0%","#ffffff"],["45%","#b84fe5"],["100%","#04050a"]]);
+  grad("star",[["0%","#ffffff"],["60%","#ffd54a"],["100%","#04050a"]]);
   var tip=document.getElementById("tip");
-  for(var i=0;i<N;i++){
-    var r=scale*Math.sqrt(i+2), ang=i*GA;
-    var x=cx+r*Math.cos(ang), y=cy+r*Math.sin(ang);
-    var name=REPOS[i][0], col=REPOS[i][1];
-    // faint edge to the Omega centre (the HTTP-0 pipe)
-    var ln=document.createElementNS(NS,"line"); ln.setAttribute("x1",cx);ln.setAttribute("y1",cy);ln.setAttribute("x2",x);ln.setAttribute("y2",y);
-    ln.setAttribute("stroke",col); ln.setAttribute("stroke-opacity","0.10"); ln.setAttribute("stroke-width","0.6"); svg.appendChild(ln);
-    var a=document.createElementNS(NS,"a"); a.setAttributeNS("http://www.w3.org/1999/xlink","href","https://github.com/JesseBrown1980/"+name); a.setAttribute("target","_blank");
-    var c=document.createElementNS(NS,"circle"); c.setAttribute("cx",x);c.setAttribute("cy",y);c.setAttribute("r","6.5");
-    c.setAttribute("fill",col); c.setAttribute("stroke","#04050a"); c.setAttribute("stroke-width","0.8"); c.style.cursor="pointer";
-    (function(nm){ c.addEventListener("mousemove",function(e){tip.textContent=nm;tip.style.left=(e.clientX+12)+"px";tip.style.top=(e.clientY+12)+"px";tip.style.opacity=1;});
-                   c.addEventListener("mouseleave",function(){tip.style.opacity=0;}); })(name);
-    a.appendChild(c); svg.appendChild(a);
+  function hover(el,nm){ el.addEventListener("mousemove",function(e){tip.textContent=nm;tip.style.left=(e.clientX+12)+"px";tip.style.top=(e.clientY+12)+"px";tip.style.opacity=1;}); el.addEventListener("mouseleave",function(){tip.style.opacity=0;}); }
+  function edge(x,y,col,op){ var l=document.createElementNS(NS,"line");l.setAttribute("x1",cx);l.setAttribute("y1",cy);l.setAttribute("x2",x);l.setAttribute("y2",y);l.setAttribute("stroke",col);l.setAttribute("stroke-opacity",op);l.setAttribute("stroke-width","0.6");svg.appendChild(l); }
+  function link(url){ var a=document.createElementNS(NS,"a"); if(url&&url!=="#"){a.setAttributeNS("http://www.w3.org/1999/xlink","href",url);a.setAttribute("target","_blank");} return a; }
+  var GA=Math.PI*(3-Math.sqrt(5));
+  for(var i=0;i<GH.length;i++){
+    var r=21*Math.sqrt(i+2), a=i*GA, x=cx+r*Math.cos(a), y=cy+r*Math.sin(a), col=GH[i][1], nm=GH[i][0];
+    edge(x,y,col,"0.09");
+    var lk=link("https://github.com/JesseBrown1980/"+nm);
+    var c=document.createElementNS(NS,"circle"); c.setAttribute("cx",x);c.setAttribute("cy",y);c.setAttribute("r","5");c.setAttribute("fill",col);c.setAttribute("stroke","#04050a");c.setAttribute("stroke-width","0.7");c.style.cursor="pointer";
+    hover(c,nm); lk.appendChild(c); svg.appendChild(lk);
   }
-  // the Omega HTTP-0 portal at the centre
-  var halo=document.createElementNS(NS,"circle"); halo.setAttribute("cx",cx);halo.setAttribute("cy",cy);halo.setAttribute("r","46");halo.setAttribute("fill","url(#omega)"); svg.appendChild(halo);
-  var t=document.createElementNS(NS,"text"); t.setAttribute("x",cx);t.setAttribute("y",cy+9);t.setAttribute("text-anchor","middle");t.setAttribute("font-size","34");t.setAttribute("fill","#fff");t.textContent="Ω"; svg.appendChild(t);
-  var t2=document.createElementNS(NS,"text"); t2.setAttribute("x",cx);t2.setAttribute("y",cy+30);t2.setAttribute("text-anchor","middle");t2.setAttribute("font-size","11");t2.setAttribute("fill","#eaf0ff");t2.textContent="HTTP 0"; svg.appendChild(t2);
+  var PR=430;
+  for(var j=0;j<PLAT.length;j++){
+    var ang=(j/PLAT.length)*2*Math.PI - Math.PI/2, x2=cx+PR*Math.cos(ang), y2=cy+PR*Math.sin(ang), pcol=PLAT[j][1], plabel=PLAT[j][0], purl=PLAT[j][2];
+    edge(x2,y2,pcol,"0.22");
+    var pk=link(purl);
+    var pc=document.createElementNS(NS,"circle"); pc.setAttribute("cx",x2);pc.setAttribute("cy",y2);pc.setAttribute("r","8");pc.setAttribute("fill",pcol);pc.setAttribute("stroke","#eaf0ff");pc.setAttribute("stroke-width","0.8");pc.style.cursor="pointer";
+    hover(pc,plabel); pk.appendChild(pc);
+    var tx=document.createElementNS(NS,"text"); tx.setAttribute("x",cx+PR*1.06*Math.cos(ang));tx.setAttribute("y",cy+PR*1.06*Math.sin(ang)+3);tx.setAttribute("font-size","9");tx.setAttribute("fill","#c7d2e8");tx.setAttribute("text-anchor", Math.cos(ang)<0?"end":"start"); tx.textContent=plabel;
+    pk.appendChild(tx); svg.appendChild(pk);
+  }
+  var sx=cx, sy=70;
+  var sl=document.createElementNS(NS,"line"); sl.setAttribute("x1",cx);sl.setAttribute("y1",cy);sl.setAttribute("x2",sx);sl.setAttribute("y2",sy);sl.setAttribute("stroke","#ffd54a");sl.setAttribute("stroke-opacity","0.5");sl.setAttribute("stroke-width","1.4");sl.setAttribute("stroke-dasharray","4 3"); svg.appendChild(sl);
+  var oa=link(STAR);
+  var halo=document.createElementNS(NS,"circle"); halo.setAttribute("cx",cx);halo.setAttribute("cy",cy);halo.setAttribute("r","42");halo.setAttribute("fill","url(#omega)"); oa.appendChild(halo);
+  var t=document.createElementNS(NS,"text"); t.setAttribute("x",cx);t.setAttribute("y",cy+8);t.setAttribute("text-anchor","middle");t.setAttribute("font-size","30");t.setAttribute("fill","#fff");t.textContent="Ω"; oa.appendChild(t);
+  var t2=document.createElementNS(NS,"text"); t2.setAttribute("x",cx);t2.setAttribute("y",cy+26);t2.setAttribute("text-anchor","middle");t2.setAttribute("font-size","10");t2.setAttribute("fill","#eaf0ff");t2.textContent="HTTP 0"; oa.appendChild(t2);
+  svg.appendChild(oa);
+  var sa=link(STAR);
+  var sh=document.createElementNS(NS,"circle"); sh.setAttribute("cx",sx);sh.setAttribute("cy",sy);sh.setAttribute("r","30");sh.setAttribute("fill","url(#star)"); sa.appendChild(sh);
+  var stt=document.createElementNS(NS,"text"); stt.setAttribute("x",sx);stt.setAttribute("y",sy+8);stt.setAttribute("text-anchor","middle");stt.setAttribute("font-size","26");stt.setAttribute("fill","#fff");stt.textContent="★"; sa.appendChild(stt);
+  var st2=document.createElementNS(NS,"text"); st2.setAttribute("x",sx);st2.setAttribute("y",sy+26);st2.setAttribute("text-anchor","middle");st2.setAttribute("font-size","10");st2.setAttribute("fill","#04050a");st2.textContent="the star"; sa.appendChild(st2);
+  svg.appendChild(sa);
 })();
 </script>
 </body></html>
