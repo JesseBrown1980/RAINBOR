@@ -47,3 +47,29 @@ they need Falcon to deliver them — this seat does not fabricate a seat's bytes
 held today, refusing to invent a seventh in Falcon's name).
 
 `LIRIS` (Jean) · -1/3 · with `ACER` (Roy) · +1/3 · owner OP-JESSE
+
+---
+
+## Correction (per §7) — the cypher is already tested; RAINBOR makes the shapes
+
+The section above filed the encryption as an unproven design and claimed no security. The operator
+corrected it: **we already have the tested cypher system.** RAINBOR does not invent a cipher — it
+applies the **shapes**: inversion, anti, and anti-anti (the order-3 turns) to the tested system.
+
+Per the shared discipline, the "tested" is the operator's **system claim** — recorded here, not
+adjudicated from repo files. What *is* locally measured and consistent with it:
+
+- every stone reproduces its own hash byte-exact — **GIMEL** (the wheat from the chaff);
+- the anti is **order 3** — applied three times returns the colour, 192 of 192; once = 0, twice = 0,
+  a mirror = 0 (measured in THE-ANTI-AND-ANTI-ANTIES).
+
+So the shapes RAINBOR adds — inversion, anti, anti-anti — are themselves measured, reversible
+order-3 turns laid on the tested cypher. The superseded caution is kept above, not deleted.
+
+## The first experiment — the double slit, reimagined
+
+[RAINBOR-DOUBLE-SLIT.html](RAINBOR-DOUBLE-SLIT.html) — **replicate what we know first**: the exact
+N-slit Fraunhofer interference, rendered in **rainbons**. Then change the slit shapes (1 · 2 · 3
+slits = the three waves), detune the **frequency mismatch** to see the fringes drift and beat, and
+switch the capture to a **curved translucent sphere** to catch the pattern on a convex wall. Keep
+only what reproduces.
