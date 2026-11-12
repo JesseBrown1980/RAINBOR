@@ -73,3 +73,17 @@ N-slit Fraunhofer interference, rendered in **rainbons**. Then change the slit s
 slits = the three waves), detune the **frequency mismatch** to see the fringes drift and beat, and
 switch the capture to a **curved translucent sphere** to catch the pattern on a convex wall. Keep
 only what reproduces.
+
+## November 12, 2026 — sparse 12-billion-address Rainbon test
+
+The original Rainbon slit programs and the [Matrix Law Essentials exact jump kernel](https://github.com/JesseBrown1980/The-matrix-law-essentials/blob/e9eb98803d0474c31aca045723d1d896a03dc8f1/python/matrix_tricks/jump3_ntt.py) were joined in an independently reproducible software experiment.
+
+- **Two hosted runs PASS:** [original instrumented](https://github.com/JesseBrown1980/RAINBOR/actions/runs/43303628610) and [optimized](https://github.com/JesseBrown1980/RAINBOR/actions/runs/43304245335). All 186 HBP rows match except the intentionally different memory-measurement row.
+- **Exactly reproducible matrix jumps:** `3^40` via NTT and cubing, `2^40` binary jump, frozen forward/backward plays, and mixed `3^40+2^20+3` all passed. The 1/2/3-slit optical baseline agrees with the original Fraunhofer formula to `7.35e-14`.
+- **Screen size:** 12 billion *virtual addressable meta-pixels*, with **243 sampled** per screen, **144 screens** and 409 **synthetic colour channels** in the rainbow mode. Peak process RSS about 20.3 MB. These are not 12 billion computed independent particles.
+- **Density test:** explicit dimensionless neutron-like and black-hole-like phase lenses change two-/three-slit interference; an **assumed** high-temperature gravity-lens cutoff returns the screen to vacuum, and switching that assumption off changes the screen again. Wind and radiation are also independently specified optical controls. **These are not measured astrophysical forces or discovered quantum particles.**
+- **Critical falsifier:** adding a local force *during* every microscopic evolution step breaks the pure matrix jump, so nonlinear density-driven dynamics cannot be fast-forwarded without a reduction/composition proof.
+
+[Source](experiments/rainbon_12b_jump_density.py) · [frozen hypothesis](experiments/RAINBON-12B-JUMP-DENSITY-FREEZE-20261112.hbp) · [measured HBP summary](experiments/RAINBON-12B-MEASURED-20261112.hbp) · [full findings and limitations](experiments/RAINBON-12B-MEASURED-20261112.md).
+
+The Yang–Mills protected coupling `r=9` launch remains **HOLD**, unaffected by this RAINBOR demonstration.

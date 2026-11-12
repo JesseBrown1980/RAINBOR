@@ -1,0 +1,79 @@
+name: RAINBOR 12B sparse Rainbon virtual pixels and exact matrix jump
+on:
+  push:
+    paths:
+      - '.github/workflows/rainbon-12b-jump-density.yml'
+      - 'experiments/rainbon_12b_jump_density.py'
+      - 'experiments/RAINBON-12B-JUMP-DENSITY-FREEZE-20261112.hbp'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: rainbon-sparse-12b-rssfast-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  exact_wave_and_density:
+    name: Verify legacy 1-3 slits and exact 3^40 / 2^40 jumps at 12B virtual addresses
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: JesseBrown1980/The-matrix-law-essentials
+          ref: e9eb98803d0474c31aca045723d1d896a03dc8f1
+          path: matrix-laws
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Authenticate original RAINBOR slit sources and precommitted experiment
+        run: |
+          set -euo pipefail
+          sha256sum -c RAINBOR-DOUBLE-SLIT.html.sha256
+          sha256sum -c RAINBOR-COLOUR-SLITS-AND-SPHERES.html.sha256
+          grep -q '^FREEZE|schema=RAINBON-12B-METAPIXEL-JUMP-V1|' experiments/RAINBON-12B-JUMP-DENSITY-FREEZE-20261112.hbp
+          grep -q '^FORBIDDEN|coupling_r9=HOLD|' experiments/RAINBON-12B-JUMP-DENSITY-FREEZE-20261112.hbp
+          test "$(git -C matrix-laws rev-parse HEAD)" = e9eb98803d0474c31aca045723d1d896a03dc8f1
+          python3 -m py_compile experiments/rainbon_12b_jump_density.py
+      - name: Run source-authenticated exact jump and sparse colour screen
+        run: |
+          set -euo pipefail
+          mkdir -p results
+          python3 -B experiments/rainbon_12b_jump_density.py \
+            --matrix-source matrix-laws/python/matrix_tricks/jump3_ntt.py \
+            --output results/RAINBON-12B-RESULT-20261112.hbp | tee results/EXECUTION-SUMMARY.hbp
+          grep -q '^RAINBON12B_VERIFY|status=PASS|' results/RAINBON-12B-RESULT-20261112.hbp
+          grep -q '^EXPERIMENT_PASS|scenarios=6|screens=144|meta_pixel_addresses=12000000000|sampled_addresses_per_screen=243|' results/RAINBON-12B-RESULT-20261112.hbp
+          test "$(grep -c '^RAINBON|' results/RAINBON-12B-RESULT-20261112.hbp)" -eq 144
+          test "$(grep -c '^EXTERNAL_CONTROL|' results/RAINBON-12B-RESULT-20261112.hbp)" -eq 24
+          grep -q '^FREEZE_PLAY|at=3^40|forward1=PASS|forward3=PASS|backward1=PASS|' results/RAINBON-12B-RESULT-20261112.hbp
+          grep -q '^MIXED_JUMP|time=3^40+2^20+3|frozen_then_binary_eq_direct_NTT=PASS|' results/RAINBON-12B-RESULT-20261112.hbp
+          grep -q '^NONLINEAR_OR_FORCED_CONTROL|repeated_local_source_KICK=7|steps=27|pure_linear_jump_eq_forced=NO|correctly_refused=PASS|' results/RAINBON-12B-RESULT-20261112.hbp
+          (cd results && sha256sum -c RAINBON-12B-RESULT-20261112.hbp.sha256)
+      - name: Independent integrity attack must detect one changed result byte
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          source=Path("results/RAINBON-12B-RESULT-20261112.hbp")
+          attacked=Path("results/ATTACK-RESULT.hbp")
+          original=source.read_bytes()
+          assert original
+          attacked.write_bytes(bytes([original[0]^1])+original[1:])
+          assert attacked.read_bytes()!=original
+          from hashlib import sha256
+          recorded=Path(str(source)+".sha256").read_text().split()[0]
+          assert sha256(source.read_bytes()).hexdigest()==recorded
+          assert sha256(attacked.read_bytes()).hexdigest()!=recorded
+          Path("results/HASH-ATTACK.hbp").write_text("HASH_CONTROL|changed_byte=0|receipt_refuses_tamper=PASS|hash_does_not_produce_gravity=YES|json=0\n",encoding="ascii")
+          attacked.unlink()
+          PY
+          (cd results && sha256sum RAINBON-12B-RESULT-20261112.hbp EXECUTION-SUMMARY.hbp HASH-ATTACK.hbp > SHA256SUMS && sha256sum -c SHA256SUMS)
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rainbon-12b-exact-jumps-and-density-experiment
+          path: results/
+          retention-days: 30
+          if-no-files-found: warn
