@@ -17,7 +17,7 @@ from importlib.util import spec_from_file_location, module_from_spec
 from hashlib import sha256
 from math import pi, sin, cos, sqrt, log1p, exp
 import argparse
-import tracemalloc
+import resource
 
 VIRTUAL_PIXELS=12_000_000_000
 SAMPLES=243
@@ -264,7 +264,6 @@ def main():
     p.add_argument("--matrix-source",required=True,type=Path)
     p.add_argument("--output",required=True,type=Path)
     args=p.parse_args()
-    tracemalloc.start()
     result=[
         "META|schema=RAINBON-METAPIXEL-12B-JUMP-DENSITY-V1|simulation=OPTICAL_MODEL|virtual_addresses=%d|sampled=%d|colors_rainbow=409|r9=HOLD|json=0"%
         (VIRTUAL_PIXELS,SAMPLES)
@@ -276,10 +275,9 @@ def main():
     saved=run_jumps(jump,result)
     run_baseline(result)
     screens=experiment(saved,result)
-    _,peak=tracemalloc.get_traced_memory()
-    tracemalloc.stop()
-    assert peak<30_000_000,("not sparse enough",peak)
-    result.append("RESOURCE|virtual_addresses=%d|screens=%d|peak_python_alloc_bytes=%d|dense_12b_allocation=NO|json=0"%
+    peak=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss*1024
+    assert peak<150_000_000,("not sparse enough",peak)
+    result.append("RESOURCE|virtual_addresses=%d|screens=%d|peak_process_rss_bytes=%d|dense_12b_allocation=NO|json=0"%
                   (VIRTUAL_PIXELS,screens,peak))
     result.append("LIMIT|rainbons_are_not_actual_photons|inferred_quarks_gluons_glueballs_protons=NO|gravity_temperature_lens_RADIATION_are_assumed_rules|hash_not_gravity|12b_independent_particles=NO|r9_HOLD=YES|json=0")
     result.append("RAINBON12B_VERIFY|status=PASS|matrix_jumps=EXACT|legacy_optics=PASS|density_temperature=ASSUMED|virtual_screen=SPARSE|json=0")
