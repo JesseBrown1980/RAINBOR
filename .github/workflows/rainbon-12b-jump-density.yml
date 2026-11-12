@@ -9,7 +9,7 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: rainbon-sparse-12b-${{ github.ref }}
+  group: rainbon-sparse-12b-rssfast-${{ github.ref }}
   cancel-in-progress: false
 jobs:
   exact_wave_and_density:
